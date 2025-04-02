@@ -4,7 +4,7 @@ const cors = require("cors")
 const app = express();
 
 app.use(cors({
-    origin: ['https://www.botwaviation.com', 'http://localhost:4000'], // Allow only this domain to access the API
+    origin: '*',// Allow only this domain to access the API
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], 
     credentials: true,// Allowed headers
