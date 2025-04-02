@@ -10,7 +10,7 @@ app.use(cors());
 
 // defining PORT 
 
-const PORT =  4000
+const PORT =  5500
 
 // using middleware for the passing the data from backend 
 
