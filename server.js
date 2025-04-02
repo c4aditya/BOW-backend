@@ -24,7 +24,8 @@ const createDetails = require("./routes/createDetails")
 // importing enquiry now route 
 
 const enquiryNow = require("./routes/enwuiryNow")
-
+// for debugging that the enquiryNow is working or not
+console.log("the enw is reuuig ")
 // defining enquiry now route
 app.use("/" ,enquiryNow )
 
