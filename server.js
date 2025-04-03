@@ -2,6 +2,7 @@ const express = require("express")
 const cors = require("cors")
 
 const app = express();
+app.use(cors());
 
 app.use(cors({
     origin:    ['https://www.botwaviation.com', 'http://localhost:4000'], // Allow only this domain to access the API
