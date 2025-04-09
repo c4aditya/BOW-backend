@@ -21,14 +21,24 @@ async function onlineAddmission(req, res) {
         Address: ${address}, Pincode: ${pincode}
         `;
 
-        // 👇 Collect file paths from Multer's req.files
+        // 🔥 Attach file paths using absolute path
         const attachments = [];
         if (req.files) {
-            if (req.files.tenthFile) attachments.push(req.files.tenthFile[0].path);
-            if (req.files.twelfthFile) attachments.push(req.files.twelfthFile[0].path);
-            if (req.files.graduationFile) attachments.push(req.files.graduationFile[0].path);
-            if (req.files.postGraduationFile) attachments.push(req.files.postGraduationFile[0].path);
+            if (req.files.tenthFile) {
+                attachments.push(path.join(__dirname, "..", req.files.tenthFile[0].path));
+            }
+            if (req.files.twelfthFile) {
+                attachments.push(path.join(__dirname, "..", req.files.twelfthFile[0].path));
+            }
+            if (req.files.graduationFile) {
+                attachments.push(path.join(__dirname, "..", req.files.graduationFile[0].path));
+            }
+            if (req.files.postGraduationFile) {
+                attachments.push(path.join(__dirname, "..", req.files.postGraduationFile[0].path));
+            }
         }
+
+        console.log("Attachments sending in email:", attachments); // Debug
 
         try {
             await sendMail({
