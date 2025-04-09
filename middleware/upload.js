@@ -1,11 +1,10 @@
-// middleware/upload.js
 const multer = require("multer");
 const path = require("path");
 
 // Temporary file storage setup
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uplode/"); // Uploads folder (create this in your project root)
+    cb( "upload/"); // ✅ Fixed spelling here
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
@@ -14,7 +13,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const uplode = multer({
+const upload = multer({
   storage: storage,
   limits: {
     fileSize: 5 * 1024 * 1024, // 5 MB file size limit
@@ -32,4 +31,4 @@ const uplode = multer({
   }
 });
 
-module.exports = uplode;
+module.exports = upload; // ✅ Fixed spelling here
