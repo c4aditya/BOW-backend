@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const upload = require("../middleware/uplode"); // multer middleware import
+const uplode = require("../middleware/uplode") // multer middleware import
 
 const onlineAddmissionDetails = require("../controllers/onlineAddmission");
 
 router.post(
   "/onlineAddmissionDetails",
-  upload.fields([
+  uplode.fields([
     { name: "tenthFile", maxCount: 1 },
     { name: "twelfthFile", maxCount: 1 },
     { name: "graduationFile", maxCount: 1 },

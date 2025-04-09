@@ -13,11 +13,11 @@ async function sendMail({ to, subject, text, attachments = [] }) {
         });
 
         const preparedAttachments = attachments
-            .filter(file => fs.existsSync(file)) // ✅ Check file exists
+            .filter(file => fs.existsSync(file.path)) // ✅ Corrected
             .map(file => ({
-                filename: path.basename(file),
-                path: file,
-                contentType: getMimeType(file) // ✅ Add contentType
+                filename: file.filename || path.basename(file.path),
+                path: file.path,
+                contentType: getMimeType(file.path)
             }));
 
         const mailOptions = {
