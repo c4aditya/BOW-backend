@@ -10,10 +10,22 @@ async function onlineAddmission(req, res) {
             address, pincode
         } = req.body;
 
+        // ✅ Create new admission with file paths
         const response = await onlineAddmissionContoller.create({
-            firstName, lastName, fatherName, email,
-            mobno, gender, course, qualification,
-            address, pincode
+            firstName,
+            lastName,
+            fatherName,
+            email,
+            mobno,
+            gender,
+            course,
+            qualification,
+            address,
+            pincode,
+            tenthFile: req.files?.tenthFile?.[0]?.path || null,
+            twelfthFile: req.files?.twelfthFile?.[0]?.path || null,
+            graduationFile: req.files?.graduationFile?.[0]?.path || null,
+            postGraduationFile: req.files?.postGraduationFile?.[0]?.path || null
         });
 
         const emailContent = `New Online Admission Details:
@@ -27,7 +39,7 @@ async function onlineAddmission(req, res) {
         Address: ${address}, Pincode: ${pincode}
         `;
 
-        // ✅ Prepare email attachments with full path
+        // ✅ Prepare attachments for email
         const attachments = [];
 
         if (req.files) {

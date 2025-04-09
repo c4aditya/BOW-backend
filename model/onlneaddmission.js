@@ -36,16 +36,8 @@ const admissionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // Optional fields already in your form:
-    qualification: {
-        type: String
-    },
-    address: {
-        type: String
-    },
-    pincode: {
-        type: String
-    },
+
+    // ✅ Add file path fields here:
     tenthFile: {
         type: String
     },
