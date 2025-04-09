@@ -8,19 +8,24 @@ async function sendMail({ to, subject, text, attachments = [] }) {
             service: "gmail",
             auth: {
                 user: "singhas1418@gmail.com",
-                pass: "oect pmfd mcdf oeyd"  // secure this in .env in real apps
+                pass: "oect pmfd mcdf oeyd"
             }
         });
+
+        const preparedAttachments = attachments
+            .filter(file => fs.existsSync(file)) // ✅ Check file exists
+            .map(file => ({
+                filename: path.basename(file),
+                path: file,
+                contentType: getMimeType(file) // ✅ Add contentType
+            }));
 
         const mailOptions = {
             from: "singhas1418@gmail.com",
             to,
             subject,
             text,
-            attachments: attachments.map(file => ({
-                filename: path.basename(file),
-                path: file
-            }))
+            attachments: preparedAttachments
         };
 
         const info = await transporter.sendMail(mailOptions);
@@ -30,6 +35,22 @@ async function sendMail({ to, subject, text, attachments = [] }) {
     } catch (error) {
         console.error("Error sending email:", error);
         throw error;
+    }
+}
+
+// Utility: Guess mime type
+function getMimeType(filePath) {
+    const ext = path.extname(filePath).toLowerCase();
+    switch (ext) {
+        case ".jpg":
+        case ".jpeg":
+            return "image/jpeg";
+        case ".png":
+            return "image/png";
+        case ".pdf":
+            return "application/pdf";
+        default:
+            return "application/octet-stream";
     }
 }
 
