@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const uplode = require("../middleware/uplode") // multer middleware import
+const uplode = require("../middleware/upload") // multer middleware import
 
 const onlineAddmissionDetails = require("../controllers/onlineAddmission");
 
