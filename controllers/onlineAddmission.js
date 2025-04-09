@@ -3,6 +3,7 @@ const sendMail = require("../email/email");
 const path = require("path");
 
 async function onlineAddmission(req, res) {
+      
     try {
         const { firstName, lastName, fatherName, email, mobno, gender, course, qualification, address, pincode } = req.body;
 
