@@ -1,12 +1,14 @@
 const nodemailer = require("nodemailer");
+const fs = require("fs");
+const path = require("path");
 
-async function sendMail({ to, subject, text }) {
+async function sendMail({ to, subject, text, attachments = [] }) {
     try {
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
                 user: "singhas1418@gmail.com",
-                pass: "oect pmfd mcdf oeyd"
+                pass: "oect pmfd mcdf oeyd"  // secure this in .env in real apps
             }
         });
 
@@ -14,7 +16,11 @@ async function sendMail({ to, subject, text }) {
             from: "singhas1418@gmail.com",
             to,
             subject,
-            text
+            text,
+            attachments: attachments.map(file => ({
+                filename: path.basename(file),
+                path: file
+            }))
         };
 
         const info = await transporter.sendMail(mailOptions);

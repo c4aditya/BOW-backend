@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
 
-const admissionSchema = new mongoose.Schema(
-    {
+const admissionSchema = new mongoose.Schema({
     firstName: {
         type: String,
         required: true,
-        maxlength: 50 // `max` is not valid, use `maxlength`
+        maxlength: 50
     },
     lastName: {
         type: String,
@@ -36,8 +35,29 @@ const admissionSchema = new mongoose.Schema(
     course: {
         type: String,
         required: true
+    },
+    // Optional fields already in your form:
+    qualification: {
+        type: String
+    },
+    address: {
+        type: String
+    },
+    pincode: {
+        type: String
+    },
+    tenthFile: {
+        type: String
+    },
+    twelfthFile: {
+        type: String
+    },
+    graduationFile: {
+        type: String
+    },
+    postGraduationFile: {
+        type: String
     }
-})
+});
 
-
-module.exports = mongoose.model("onlineAddmissionSchema" , admissionSchema )
+module.exports = mongoose.model("onlineAddmissionSchema", admissionSchema);

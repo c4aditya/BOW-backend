@@ -1,5 +1,6 @@
 const onlineAddmissionContoller = require("../model/onlneaddmission");
 const sendMail = require("../email/email");
+const path = require("path");
 
 async function onlineAddmission(req, res) {
     try {
@@ -10,21 +11,31 @@ async function onlineAddmission(req, res) {
         });
 
         const emailContent = `New Online Admission Details:
-            Name: ${firstName} ${lastName}
-            Father's Name: ${fatherName}
-            Email: ${email}
-            Mobile No: ${mobno}
-            Gender: ${gender}
-            Course: ${course}
-            Qualification: ${qualification}
-            Address: ${address}, Pincode: ${pincode}
+        Name: ${firstName} ${lastName}
+        Father's Name: ${fatherName}
+        Email: ${email}
+        Mobile No: ${mobno}
+        Gender: ${gender}
+        Course: ${course}
+        Qualification: ${qualification}
+        Address: ${address}, Pincode: ${pincode}
         `;
+
+        // 👇 Collect file paths from Multer's req.files
+        const attachments = [];
+        if (req.files) {
+            if (req.files.tenthFile) attachments.push(req.files.tenthFile[0].path);
+            if (req.files.twelfthFile) attachments.push(req.files.twelfthFile[0].path);
+            if (req.files.graduationFile) attachments.push(req.files.graduationFile[0].path);
+            if (req.files.postGraduationFile) attachments.push(req.files.postGraduationFile[0].path);
+        }
 
         try {
             await sendMail({
                 to: "singhas1418@gmail.com",
                 subject: "New Online Admission Received",
-                text: emailContent
+                text: emailContent,
+                attachments
             });
 
             res.status(200).json({
