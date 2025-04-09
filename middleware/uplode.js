@@ -5,7 +5,7 @@ const path = require("path");
 // Temporary file storage setup
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "upload/"); // Uploads folder (create this in your project root)
+    cb(null, "uplode/"); // Uploads folder (create this in your project root)
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
