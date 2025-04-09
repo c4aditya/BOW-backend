@@ -16,7 +16,7 @@ app.use(cors({
 
 // defining PORT 
 
-const PORT =  5600
+const PORT =  5800
 
 // using middleware for the passing the data from backend 
 
