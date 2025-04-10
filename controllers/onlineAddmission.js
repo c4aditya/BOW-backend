@@ -70,6 +70,8 @@ async function onlineAddmission(req, res) {
         }
 
         console.log("📎 Attachments sending in email:", attachments);
+        console.log("REQ.FILES:", req.files);
+
 
         try {
             await sendMail({

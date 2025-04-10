@@ -39,16 +39,20 @@ const admissionSchema = new mongoose.Schema({
 
     // ✅ Add file path fields here:
     tenthFile: {
-        type: String
+        type: String,
+        default:null
     },
     twelfthFile: {
-        type: String
+        type: String,
+        default:null
     },
     graduationFile: {
-        type: String
+        type: String,
+        default:null
     },
     postGraduationFile: {
-        type: String
+        type: String,
+        default:null
     }
 });
 

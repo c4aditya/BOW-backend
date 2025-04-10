@@ -1,34 +1,26 @@
 const multer = require("multer");
 const path = require("path");
 
-// Temporary file storage setup
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb( "upload/"); // ✅ Fixed spelling here
+  destination: (req, file, cb) => {
+    cb(null, "upload/");
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
     cb(null, file.fieldname + "-" + uniqueSuffix + ext);
   }
 });
 
 const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024, // 5 MB file size limit
-  },
-  fileFilter: function (req, file, cb) {
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|pdf/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
-
-    if (extname && mimetype) {
-      cb(null, true);
-    } else {
-      cb(new Error("Only .jpeg, .jpg, .png, .pdf files are allowed"));
-    }
+    cb(null, extname && mimetype);
   }
 });
 
-module.exports = upload; // ✅ Fixed spelling here
+module.exports = upload;

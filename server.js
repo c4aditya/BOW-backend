@@ -2,6 +2,8 @@ const express = require("express")
 const cors = require("cors")
 
 const app = express();
+
+app.use("/upload", express.static("upload"));
 app.use(cors());
 
 app.use(cors({
@@ -11,7 +13,7 @@ app.use(cors({
 }));
 
 // Serve uploaded files statically (✅ yeh line add ki gayi hai)
-app.use("/upload", express.static("upload"));
+
 
 // defining PORT 
 const PORT =  5800
