@@ -22,10 +22,10 @@ async function onlineAddmission(req, res) {
             qualification,
             address,
             pincode,
-            tenthFile: req.files?.tenthFile?.[0]?.path || null,
-            twelfthFile: req.files?.twelfthFile?.[0]?.path || null,
-            graduationFile: req.files?.graduationFile?.[0]?.path || null,
-            postGraduationFile: req.files?.postGraduationFile?.[0]?.path || null
+            tenthFile: req.files,
+            twelfthFile: req.files,
+            graduationFile: req.files,
+            postGraduationFile: req.files,
         });
 
         const emailContent = `New Online Admission Details:
@@ -87,7 +87,7 @@ async function onlineAddmission(req, res) {
             });
 
         } catch (emailError) {
-            console.log("❌ Error while sending email:", emailError);
+            console.log("Error while sending email:", emailError);
 
             res.status(500).json({
                 success: false,
