@@ -7,7 +7,7 @@ app.use("/upload", express.static("upload"));
 app.use(cors());
 
 app.use(cors({
-    origin: '*', // Allow all origins
+    origin: 'https://botwaviation.com', // Allow all origins
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow all methods
     allowedHeaders: ['*'] // Allow all headers
 }));
