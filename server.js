@@ -19,8 +19,13 @@ app.use(
 // defining PORT
 const PORT = 5800;
 
+<<<<<<< HEAD
 // using middleware for the passing the data from backend
 app.use(express.json());
+=======
+// defining PORT 
+const PORT =  5900
+>>>>>>> 012bd80ade8a22e2dd70368310a855343c31e674
 
 // importing the route
 const createDetails = require("./routes/createDetails");
