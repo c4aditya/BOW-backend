@@ -1,40 +1,97 @@
-const multer = require("multer");
+const onlineAddmissionContoller = require("../model/onlneaddmission");
+const sendMail = require("../email/email");
 const path = require("path");
-const fs = require("fs");
 
-// Upload folder ka path
-const uploadPath = path.join(__dirname, "../uploads");
+async function onlineAddmission(req, res) {
+    try {
+        const {
+            firstName, lastName, fatherName, email,
+            mobno, gender, course, qualification,
+            address, pincode
+        } = req.body;
 
-// Agar uploads folder nahi hai to create karo
-if (!fs.existsSync(uploadPath)) {
-    fs.mkdirSync(uploadPath, { recursive: true });
+        // 🧾 Safe logging
+        console.log("📂 req.files:", req.files);
+
+        // ✅ Create database entry with file info (optional: store filenames only)
+        const response = await onlineAddmissionContoller.create({
+            firstName,
+            lastName,
+            fatherName,
+            email,
+            mobno,
+            gender,
+            course,
+            qualification,
+            address,
+            pincode,
+            tenthFile: req.files?.tenthFile?.[0]?.filename || null,
+            twelfthFile: req.files?.twelfthFile?.[0]?.filename || null,
+            graduationFile: req.files?.graduationFile?.[0]?.filename || null,
+            postGraduationFile: req.files?.postGraduationFile?.[0]?.filename || null,
+        });
+
+        // ✉️ Email content
+        const emailContent = `New Online Admission Details:
+        Name: ${firstName} ${lastName}
+        Father's Name: ${fatherName}
+        Email: ${email}
+        Mobile No: ${mobno}
+        Gender: ${gender}
+        Course: ${course}
+        Qualification: ${qualification}
+        Address: ${address}, Pincode: ${pincode}
+        `;
+
+        // 📎 Email attachments (if any)
+        const attachments = [];
+
+        const addAttachment = (fileField) => {
+            const file = req.files?.[fileField]?.[0];
+            if (file) {
+                attachments.push({
+                    filename: file.originalname,
+                    path: path.resolve(file.path)
+                });
+            }
+        };
+
+        // ✅ Add each file if present
+        ["tenthFile", "twelfthFile", "graduationFile", "postGraduationFile"].forEach(addAttachment);
+
+        console.log("📎 Attachments sending in email:", attachments);
+
+        // ✉️ Send email
+        try {
+            await sendMail({
+                to: "singhas1418@gmail.com",
+                subject: "New Online Admission Received",
+                text: emailContent,
+                attachments
+            });
+
+            return res.status(200).json({
+                success: true,
+                message: "Database entry created successfully and email sent to admin."
+            });
+
+        } catch (emailError) {
+            console.error("❌ Error while sending email:", emailError);
+
+            return res.status(500).json({
+                success: false,
+                message: "Email failed: " + emailError.message
+            });
+        }
+
+    } catch (error) {
+        console.error("❌ Controller Error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "There was an error while saving the data to the database",
+            error: error.message
+        });
+    }
 }
 
-// Multer storage config
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadPath); // Files will be saved here
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(null, `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`);
-    }
-});
-
-// Multer instance
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max size
-    fileFilter: function (req, file, cb) {
-        const allowedTypes = /jpeg|jpg|png|pdf/;
-        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-        const mimetype = allowedTypes.test(file.mimetype);
-        if (extname && mimetype) {
-            cb(null, true);
-        } else {
-            cb(new Error("Only images and PDF files are allowed"));
-        }
-    }
-});
-
-module.exports = upload;
+module.exports = onlineAddmission;
