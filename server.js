@@ -3,52 +3,61 @@ const cors = require("cors");
 
 const app = express();
 
-// Serve static upload folder
 app.use("/upload", express.static("upload"));
+app.use(cors());
 
-// ✅ CORRECT CORS CONFIG
 app.use(
   cors({
-    origin: "*", // Use ["http://localhost:5173"] in development
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: "*",
-    credentials: true,
+    origin: "*", // Allow all origins
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow all methods
+    allowedHeaders:["Content-Type", "Authorization", "*"], // Allow all headers
   })
 );
 
-// Optional: Handle preflight requests
-app.options("*", cors());
+// Serve uploaded files statically (✅ yeh line add ki gayi hai)
 
-// Middleware
+// defining PORT
+// using middleware for the passing the data from backend
 app.use(express.json());
-
-// Routes
+// defining PORT 
+const PORT =  5900
+// importing the route
 const createDetails = require("./routes/createDetails");
-const enquiryNow = require("./routes/enwuiryNow");
-const onlineAddmissionroute = require("./routes/onlineAddmission");
-const enroloment = require("./routes/enroloment");
-const contactUs = require("./routes/contactus");
-const certificate = require("./routes/certifacte");
 
-// Route bindings
+// importing enquiry now route
+const enquiryNow = require("./routes/enwuiryNow");
+console.log("the enw is reuuig ");
+
+// defining enquiry now route
 app.use("/", enquiryNow);
+
+//importing onlineaddmission route
+const onlineAddmissionroute = require("./routes/onlineAddmission");
 app.use("/", onlineAddmissionroute);
+
+// importing enroloment
+const enroloment = require("./routes/enroloment");
 app.use("/", enroloment);
+
+// contact us route
+const contactUs = require("./routes/contactus");
 app.use("/", contactUs);
+
+// defining the routing with the mounting
 app.use("/", createDetails);
+
+// importing the certificate page
+const certificate = require("./routes/certifacte");
 app.use("/", certificate);
 
-// Home route
+app.listen(PORT, () => {
+  console.log(`Your port is running on the ${PORT}`);
+});
+
 app.get("/", (req, res) => {
   res.send("Your Request has been created");
 });
 
-// DB Connection
+// database connection
 const databaseConnection = () => require("./config/database");
 databaseConnection();
-
-// Server
-const PORT = 5900;
-app.listen(PORT, () => {
-  console.log(`Your port is running on the ${PORT}`);
-});
