@@ -3,61 +3,52 @@ const cors = require("cors");
 
 const app = express();
 
+// Serve static upload folder
 app.use("/upload", express.static("upload"));
-// app.use(cors());
 
+// ✅ CORRECT CORS CONFIG
 app.use(
   cors({
-    origin: "*", // Allow all origins
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow all methods
-    allowedHeaders: ["*"], // Allow all headers
+    origin: "*", // Use ["http://localhost:5173"] in development
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: "*",
+    credentials: true,
   })
 );
 
-// Serve uploaded files statically (✅ yeh line add ki gayi hai)
+// Optional: Handle preflight requests
+app.options("*", cors());
 
-// defining PORT
-// using middleware for the passing the data from backend
+// Middleware
 app.use(express.json());
-// defining PORT 
-const PORT =  5900
-// importing the route
+
+// Routes
 const createDetails = require("./routes/createDetails");
-
-// importing enquiry now route
 const enquiryNow = require("./routes/enwuiryNow");
-console.log("the enw is reuuig ");
-
-// defining enquiry now route
-app.use("/", enquiryNow);
-
-//importing onlineaddmission route
 const onlineAddmissionroute = require("./routes/onlineAddmission");
-app.use("/", onlineAddmissionroute);
-
-// importing enroloment
 const enroloment = require("./routes/enroloment");
-app.use("/", enroloment);
-
-// contact us route
 const contactUs = require("./routes/contactus");
-app.use("/", contactUs);
-
-// defining the routing with the mounting
-app.use("/", createDetails);
-
-// importing the certificate page
 const certificate = require("./routes/certifacte");
+
+// Route bindings
+app.use("/", enquiryNow);
+app.use("/", onlineAddmissionroute);
+app.use("/", enroloment);
+app.use("/", contactUs);
+app.use("/", createDetails);
 app.use("/", certificate);
 
-app.listen(PORT, () => {
-  console.log(`Your port is running on the ${PORT}`);
-});
-
+// Home route
 app.get("/", (req, res) => {
   res.send("Your Request has been created");
 });
 
-// database connection
+// DB Connection
 const databaseConnection = () => require("./config/database");
 databaseConnection();
+
+// Server
+const PORT = 5900;
+app.listen(PORT, () => {
+  console.log(`Your port is running on the ${PORT}`);
+});
