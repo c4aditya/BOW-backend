@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 
 app.use("/upload", express.static("upload"));
-app.use(cors());
+// app.use(cors());
 
 app.use(
   cors({
