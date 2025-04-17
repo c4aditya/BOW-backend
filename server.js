@@ -3,22 +3,22 @@ const cors = require("cors");
 
 const app = express();
 
-app.use("/upload", express.static("upload"));
-// app.use(cors());
+app.use(cors());
 
-app.use(
-  cors({
-    origin: "*", // Allow all origins
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow all methods
-    allowedHeaders:["Content-Type", "Authorization", "*"], // Allow all headers
+app.use(cors({
+    origin:"*", 
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
+    allowedHeaders:["Content-Type", "Authorization", "*"], 
   })
 );
-
+app.options("*", cors());
+app.use(express.json());
+app.use("/upload", express.static("upload"));
 // Serve uploaded files statically (✅ yeh line add ki gayi hai)
 
 // defining PORT
 // using middleware for the passing the data from backend
-app.use(express.json());
+
 // defining PORT 
 const PORT =  5900
 // importing the route

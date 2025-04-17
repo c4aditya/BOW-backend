@@ -8,4 +8,5 @@ const route = express.Router();
 route.post("/enquiryNow", enquiryDetails);
 
 
+
 module.exports= route;
