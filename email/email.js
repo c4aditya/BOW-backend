@@ -8,7 +8,7 @@ async function sendMail({ to, subject, text, attachments = [] }) {
             service: "gmail",
             auth: {
                 user: "singhas1418@gmail.com",
-                pass: "uzye stho skgk qnmy"
+                pass: "jtyp ttez slih jdfu",
             }
         });
 
