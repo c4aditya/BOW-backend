@@ -1,31 +1,23 @@
 const nodemailer = require("nodemailer");
-const fs = require("fs");
-const path = require("path");
 
-async function sendMail({ to, subject, text, attachments = [] }) {
+
+async function sendMail({ to, subject, text}) {
     try {
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: "singhas1418@gmail.com",
-                pass: "jtyp ttez slih jdfu",
+                user:"singhas9191@gmail.com",
+                pass:"vqtj dcxe grcm igxw"
             }
         });
 
-        const preparedAttachments = attachments
-            .filter(file => fs.existsSync(file.path)) // ✅ Corrected
-            .map(file => ({
-                filename: file.filename || path.basename(file.path),
-                path: file.path,
-                contentType: getMimeType(file.path)
-            }));
 
         const mailOptions = {
-            from: "singhas1418@gmail.com",
+            from: "singhas9191@gmail.com",
             to,
             subject,
             text,
-            attachments: preparedAttachments
+          
         };
 
         const info = await transporter.sendMail(mailOptions);
@@ -38,20 +30,6 @@ async function sendMail({ to, subject, text, attachments = [] }) {
     }
 }
 
-// Utility: Guess mime type
-function getMimeType(filePath) {
-    const ext = path.extname(filePath).toLowerCase();
-    switch (ext) {
-        case ".jpg":
-        case ".jpeg":
-            return "image/jpeg";
-        case ".png":
-            return "image/png";
-        case ".pdf":
-            return "application/pdf";
-        default:
-            return "application/octet-stream";
-    }
-}
+
 
 module.exports = sendMail;
