@@ -33,7 +33,7 @@ async function enquiryDetails(req, res) {
 
             try{
                 await sendMail ({
-                    to:"singhas9191@gmail.com",
+                    to:"info@botwaviation.com",
                     subject:"New Enquiry Data",
                     text:emailContent
                 });
