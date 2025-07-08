@@ -83,7 +83,7 @@ async function onlineAddmission(req, res) {
 }
 
 // ===== MongoDB Connection =====
-mongoose.connect("mongodb://localhost:27017/yourdbname", {
+mongoose.connect("mongodb://localhost:27017/udemy", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log("MongoDB connected"))
