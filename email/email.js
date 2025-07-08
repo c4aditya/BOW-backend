@@ -7,7 +7,7 @@ async function sendMail({ to, subject, text}) {
             service: "gmail",
             auth: {
                 user:"singhas9191@gmail.com",
-                pass:""
+                pass:"xqop pwtz bbeb femc"
             }
         });
 
