@@ -1,23 +1,56 @@
-const onlineAddmissionContoller = require("../model/onlneaddmission");
-// const sendMail = require("../email/email");
+// ==== server.js (All-in-One File) ====
+
+const express = require("express");
+const multer = require("multer");
+const mongoose = require("mongoose");
 const path = require("path");
 
+const app = express();
+
+// Multer setup (file uploads will be saved to 'uploads/' folder)
+const upload = multer({ dest: "uploads/" });
+
+// ===== Mongoose Model =====
+const admissionSchema = new mongoose.Schema({
+    firstName: { type: String, required: true, maxlength: 50 },
+    lastName: { type: String, required: true, maxlength: 50 },
+    fatherName: { type: String, required: true, maxlength: 50 },
+    email: { type: String, required: true, maxlength: 100 },
+    mobno: { type: String, required: true, maxlength: 15 },
+    gender: { type: String, required: true, enum: ["Male", "Female", "Other"] },
+    course: { type: String, required: true },
+    qualification: { type: String },
+    address: { type: String },
+    pincode: { type: String },
+    tenthFile: { type: String, default: null },
+    twelfthFile: { type: String, default: null },
+    graduationFile: { type: String, default: null },
+    postGraduationFile: { type: String, default: null }
+});
+
+const OnlineAddmission = mongoose.model("onlineAddmissionSchema", admissionSchema);
+
+// ===== Controller Function =====
 async function onlineAddmission(req, res) {
     try {
+        // Debugging: log incoming data
+        console.log("BODY:", req.body);
+        console.log("FILES:", req.files);
+
         const {
             firstName, lastName, fatherName, email,
             mobno, gender, course, qualification,
             address, pincode
         } = req.body;
 
-        // ✅ Safely extract files
+        // Extract files (if any)
         const tenth = req.files?.tenthFile?.[0] || null;
         const twelfth = req.files?.twelfthFile?.[0] || null;
         const graduation = req.files?.graduationFile?.[0] || null;
         const postGraduation = req.files?.postGraduationFile?.[0] || null;
 
-        // ✅ Create new admission entry
-        const response = await onlineAddmissionContoller.create({
+        // Save to database
+        await OnlineAddmission.create({
             firstName,
             lastName,
             fatherName,
@@ -34,69 +67,10 @@ async function onlineAddmission(req, res) {
             postGraduationFile: postGraduation?.path || null,
         });
 
-        const emailContent = `New Online Admission Details:
-        Name: ${firstName} ${lastName}
-        Father's Name: ${fatherName}
-        Email: ${email}
-        Mobile No: ${mobno}
-        Gender: ${gender}
-        Course: ${course}
-        Qualification: ${qualification}
-        Address: ${address}, Pincode: ${pincode}
-        `;
-
-        // ✅ Prepare attachments for email
-        const attachments = [];
-
-        if (tenth) {
-            attachments.push({
-                filename: tenth.originalname,
-                path: path.resolve(tenth.path)
-            });
-        }
-        if (twelfth) {
-            attachments.push({
-                filename: twelfth.originalname,
-                path: path.resolve(twelfth.path)
-            });
-        }
-        if (graduation) {
-            attachments.push({
-                filename: graduation.originalname,
-                path: path.resolve(graduation.path)
-            });
-        }
-        if (postGraduation) {
-            attachments.push({
-                filename: postGraduation.originalname,
-                path: path.resolve(postGraduation.path)
-            });
-        }
-
-        console.log("📎 Attachments sending in email:", attachments);
-
-        // ✅ Send email
-        try {
-            await sendMail({
-                to: "singhas1418@gmail.com",
-                subject: "New Online Admission Received",
-                text: emailContent,
-                attachments
-            });
-
-            res.status(200).json({
-                success: true,
-                message: "Database entry created successfully and email sent to admin."
-            });
-
-        } catch (emailError) {
-            console.error("Error while sending email:", emailError);
-            res.status(500).json({
-                success: false,
-                message: "Email sending failed.",
-                error: emailError.message
-            });
-        }
+        res.status(200).json({
+            success: true,
+            message: "Database entry created successfully."
+        });
 
     } catch (error) {
         console.error("Error in onlineAddmission:", error);
@@ -108,4 +82,27 @@ async function onlineAddmission(req, res) {
     }
 }
 
-module.exports = onlineAddmission;
+// ===== MongoDB Connection =====
+mongoose.connect("mongodb://localhost:27017/yourdbname", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log("MongoDB connected"))
+  .catch(err => console.error("MongoDB connection error:", err));
+
+// ===== Route Setup =====
+app.post(
+    "/onlineAddmissionDetails/",
+    upload.fields([
+        { name: "tenthFile" },
+        { name: "twelfthFile" },
+        { name: "graduationFile" },
+        { name: "postGraduationFile" }
+    ]),
+    onlineAddmission
+);
+
+// ===== Start Server =====
+const PORT = 5900;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
