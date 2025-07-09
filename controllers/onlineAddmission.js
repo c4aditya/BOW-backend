@@ -78,7 +78,7 @@ async function onlineAddmission(req, res) {
         // ✅ Send email
         try {
             await sendMail({
-                to: "singhas1418@gmail.com",
+                to: "info@botwaviation.com",
                 subject: "New Online Admission Received",
                 text: emailContent,
                 attachments
