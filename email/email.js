@@ -7,7 +7,7 @@ async function sendMail({ to, subject, text}) {
             service: "gmail",
             auth: {
                 user:"info@botwaviation.com",
-                pass:"qbwe hafx ewbw eeui"
+                pass:"cgnm acjs nqsd olun"
             }
         });
 
