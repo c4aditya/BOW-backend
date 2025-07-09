@@ -20,7 +20,7 @@ async function contactUs(req, res) {
 
         try {
             await sendMail({
-                to: "singhas1418@gmail.com",
+                to: "info@botwaviation.com",
                 subject: `New Contact Request: ${subject}`,
                 text: emailContent
             });

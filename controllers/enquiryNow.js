@@ -14,8 +14,13 @@ async function enquiryDetails(req, res) {
             });
         }
 
-        const response = await enquireNow.create({ firstName, lastName, email, number, gender, course, message });
+        const responce = await enquireNow.create({ firstName, lastName, email, number, gender, course, message });
+        console.log( responce )
 
+        // res.status(200).json({
+        //     message:"Your data has been submited",
+        //     data:response
+        // })
      
 
         const emailContent =
@@ -28,19 +33,20 @@ async function enquiryDetails(req, res) {
             Message:${message}
 
             `
-
+          console.log(responce)
             // sending an email 
 
             try{
                 await sendMail ({
-                    to:"singhas9191@gmail.com",
+                    to:"info@botwaviation.com",
                     subject:"New Enquiry Data",
                     text:emailContent
                 });
 
                 res.status(200).json({
                     success:true,
-                    message:"The email is send to the admin"
+                    message:"The email is send to the admin and data is send to the data base ",
+                    data:responce
                 })
 
 
