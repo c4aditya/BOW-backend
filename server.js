@@ -14,7 +14,9 @@ app.use(cors({
 app.options("*", cors());
 app.use(express.json());
 
+
 // Serve uploaded files statically (✅ yeh line add ki gayi hai)
+
 
 // defining PORT
 // using middleware for the passing the data from backend

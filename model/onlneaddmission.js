@@ -26,7 +26,7 @@ const admissionSchema = new mongoose.Schema({
         type: String,
         // required: true,
         maxlength: 15
-    },
+     },
     gender: {
         type: String,
         // required: true,
