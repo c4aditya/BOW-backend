@@ -1,65 +1,83 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://aviation-courses.com",
+    "https://www.aviation-courses.com",
+    "https://api.aviation-courses.com"
+];
 
-app.use(cors({
-    origin:"*", 
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
-    allowedHeaders:["Content-Type", "Authorization"], 
-  })
-);
-app.options("*", cors());
+const corsOptions = {
+    origin: (origin, callback) => {
+        callback(null, true);
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin", "Access-Control-Allow-Origin"],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 
+// Serve uploads folder statically if needed
+app.use('/uploads', express.static('uploads'));
 
-// Serve uploaded files statically (✅ yeh line add ki gayi hai)
+const PORT = process.env.PORT || 5900;
 
-
-// defining PORT
-// using middleware for the passing the data from backend
-
-// defining PORT 
-const PORT =  5900
-// importing the route
-const createDetails = require("./routes/createDetails");
-
-// importing enquiry now route
+// Existing Landing Page Routes
 const enquiryNow = require("./routes/enwuiryNow");
-console.log("the enq is running ");
-
-// defining enquiry now route
 app.use("/", enquiryNow);
 
-//importing onlineaddmission route
 const onlineAddmissionroute = require("./routes/onlineAddmission");
 app.use("/", onlineAddmissionroute);
 
-// importing enroloment
 const enroloment = require("./routes/enroloment");
 app.use("/", enroloment);
 
-// contact us route
 const contactUs = require("./routes/contactus");
 app.use("/", contactUs);
 
-// defining the routing with the mounting
+const createDetails = require("./routes/createDetails");
 app.use("/", createDetails);
 
-// importing the certificate page
 const certificate = require("./routes/certifacte");
 app.use("/", certificate);
 
-app.listen(PORT, () => {
-  console.log(`Your port is running on the ${PORT}`);
-});
+// Classes & Authentication Module Routes
+const authRoutes = require("./routes/auth.routes");
+const courseRoutes = require("./routes/course.routes");
+const interviewClassRoutes = require("./routes/interviewClass.routes");
+
+app.use("/api/auth", authRoutes);
+app.use("/api/courses", courseRoutes);
+app.use("/api", courseRoutes);
+app.use("/api/interview-classes", interviewClassRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Your Request has been created");
+    res.send("Your Request has been created");
 });
 
-// database connection
-const databaseConnection = () => require("./config/database");
+// Basic Error Handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ success: false, message: 'Something went wrong!' });
+});
+
+// Database connection
+const databaseConnection = require("./config/database");
 databaseConnection();
+
+const server = app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+module.exports = { app, server };
