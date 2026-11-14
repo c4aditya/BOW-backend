@@ -8,9 +8,11 @@ const app = express();
 const allowedOrigins = [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://aviation-courses.com",
-    "https://www.aviation-courses.com",
-    "https://api.aviation-courses.com"
+    "https://botwavation.com",
+    "https://www.botwavation.com",
+    "https://botwavation.com/",
+    "https://www.botwavation.com/",
+   
 ];
 
 const corsOptions = {
