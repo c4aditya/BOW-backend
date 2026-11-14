@@ -8,10 +8,10 @@ const app = express();
 const allowedOrigins = [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://botwavation.com",
-    "https://www.botwavation.com",
-    "https://botwavation.com/",
-    "https://www.botwavation.com/",
+    "https://botwaviation.com",
+    "https://www.botwaviation.com",
+    "https://botwaviation.com/",
+    "https://www.botwaviation.com/",
    
 ];
 
